@@ -47,11 +47,35 @@ function isSameOriginRequest(request: NextRequest): boolean {
   return false;
 }
 
+// Demo mode — read-only, blocks all mutations
+const DEMO_MODE = process.env.DEMO_MODE === 'true';
+if (DEMO_MODE) {
+  console.log('[DEMO] Running in demo mode — all write operations are blocked');
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Only protect /api/* routes
   if (!pathname.startsWith('/api/')) {
+    // Add demo mode header for UI detection
+    if (DEMO_MODE) {
+      const response = NextResponse.next();
+      response.headers.set('X-Demo-Mode', 'true');
+      return response;
+    }
+    return NextResponse.next();
+  }
+
+  // Demo mode: block all write operations
+  if (DEMO_MODE) {
+    const method = request.method.toUpperCase();
+    if (method !== 'GET' && method !== 'HEAD' && method !== 'OPTIONS') {
+      return NextResponse.json(
+        { error: 'Demo mode — this is a read-only instance. Visit github.com/crshdn/mission-control to run your own!' },
+        { status: 403 }
+      );
+    }
     return NextResponse.next();
   }
 
