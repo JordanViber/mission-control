@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import type { Deliverable, Task } from '@/lib/types';
 
@@ -7,19 +8,19 @@ const approvalOptions: Array<Deliverable['approval_status']> = ['draft', 'in_rev
 
 export function DeliverablesClient({ initialDeliverables, tasks, project }: { initialDeliverables: Deliverable[]; tasks: Task[]; project: string }) {
   const [deliverables, setDeliverables] = useState(initialDeliverables);
-  const [form, setForm] = useState({ task_id: tasks[0]?.id ?? '', title: '', deliverable_type: 'file' as Deliverable['deliverable_type'], approval_status: 'draft' as Deliverable['approval_status'], reviewer: 'Reviewer', approved_by: '', path: '', url: '', summary: '', created_at: new Date().toISOString().slice(0, 10) });
+  const [form, setForm] = useState({ task_id: tasks[0]?.id ?? '', title: '', deliverable_type: 'file' as Deliverable['deliverable_type'], approval_status: 'draft' as Deliverable['approval_status'], reviewer: 'Reviewer', approved_by: '', path: '', url: '', screenshot_path: '', source_url: '', summary: '', created_at: new Date().toISOString().slice(0, 10) });
 
   async function createItem(e: React.FormEvent) {
     e.preventDefault();
     const res = await fetch('/api/deliverables', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, project, task_id: form.task_id || null, reviewer: form.reviewer || null, approved_by: form.approved_by || null, path: form.path || null, url: form.url || null }),
+      body: JSON.stringify({ ...form, project, task_id: form.task_id || null, reviewer: form.reviewer || null, approved_by: form.approved_by || null, path: form.path || null, url: form.url || null, screenshot_path: form.screenshot_path || null, source_url: form.source_url || null }),
     });
     if (res.ok) {
       const created = await res.json() as Deliverable;
       setDeliverables((current) => [created, ...current]);
-      setForm({ ...form, title: '', approved_by: '', path: '', url: '', summary: '' });
+      setForm({ ...form, title: '', approved_by: '', path: '', url: '', screenshot_path: '', source_url: '', summary: '' });
     }
   }
 
@@ -62,6 +63,10 @@ export function DeliverablesClient({ initialDeliverables, tasks, project }: { in
           <input className="input" placeholder="Path (optional)" value={form.path} onChange={(e) => setForm({ ...form, path: e.target.value })} />
           <input className="input" placeholder="URL (optional)" value={form.url} onChange={(e) => setForm({ ...form, url: e.target.value })} />
         </div>
+        <div className="formGrid compact">
+          <input className="input" placeholder="Screenshot path (optional)" value={form.screenshot_path} onChange={(e) => setForm({ ...form, screenshot_path: e.target.value })} />
+          <input className="input" placeholder="Source URL (optional)" value={form.source_url} onChange={(e) => setForm({ ...form, source_url: e.target.value })} />
+        </div>
         <textarea className="input" placeholder="Summary" rows={3} value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} required />
         <button className="button">Create deliverable</button>
       </form>
@@ -79,11 +84,14 @@ export function DeliverablesClient({ initialDeliverables, tasks, project }: { in
             <div className="muted" style={{ marginTop: 6 }}>Approved by: {item.approved_by ?? '—'}</div>
             {item.path ? <div className="muted" style={{ marginTop: 6 }}>Path: {item.path}</div> : null}
             {item.url ? <div className="muted" style={{ marginTop: 6 }}>URL: {item.url}</div> : null}
+            {item.source_url ? <div className="muted" style={{ marginTop: 6 }}>Source URL: {item.source_url}</div> : null}
+            {item.screenshot_path ? <div className="muted" style={{ marginTop: 6 }}>Screenshot: {item.screenshot_path}</div> : null}
+            {item.screenshot_path ? <Image src={item.screenshot_path} alt={`${item.title} screenshot`} width={1200} height={800} style={{ marginTop: 10, width: '100%', height: 'auto', borderRadius: 12, border: '1px solid var(--border)' }} /> : null}
             <div style={{ marginTop: 6 }}>{item.summary}</div>
             <div className="subtleRow" style={{ marginTop: 10 }}>
-              <button className="button" onClick={() => updateItem(item.id, { approval_status: 'in_review', approved_by: null })}>Send to review</button>
-              <button className="button" onClick={() => updateItem(item.id, { approval_status: 'approved', approved_by: 'Jordan' })}>Approve</button>
-              <button className="button" onClick={() => updateItem(item.id, { approval_status: 'changes_requested', approved_by: null })}>Request changes</button>
+              <button className="button" type="button" onClick={() => updateItem(item.id, { approval_status: 'in_review', approved_by: null })}>Send to review</button>
+              <button className="button" type="button" onClick={() => updateItem(item.id, { approval_status: 'approved', approved_by: 'Jordan' })}>Approve</button>
+              <button className="button" type="button" onClick={() => updateItem(item.id, { approval_status: 'changes_requested', approved_by: null })}>Request changes</button>
             </div>
           </div>
         ))}

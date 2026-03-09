@@ -81,3 +81,15 @@ The repo now includes:
 - a left sidebar designed to grow into the main operating surface
 
 The app is no longer an in-memory mock shell; it is now a local database-backed foundation with runtime-aware session scaffolding.
+
+## Screenshot workflow
+
+A browser-backed screenshot workflow is now available using `agent-browser`.
+
+Example:
+
+```bash
+npm run screenshot:deliverable -- http://localhost:4010/ public/artifacts/mission-control-home.png "Mission Control home"
+```
+
+This creates a reusable screenshot artifact under `public/artifacts/` that can be attached to deliverables, review notes, or merge request context.

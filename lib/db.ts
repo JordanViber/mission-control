@@ -62,6 +62,7 @@ db.exec(`
     name TEXT NOT NULL,
     schedule TEXT NOT NULL,
     next_run TEXT NOT NULL,
+    next_run_at TEXT,
     owner TEXT NOT NULL,
     project TEXT,
     status TEXT NOT NULL,
@@ -88,6 +89,8 @@ db.exec(`
     approved_by TEXT,
     path TEXT,
     url TEXT,
+    screenshot_path TEXT,
+    source_url TEXT,
     summary TEXT NOT NULL,
     created_at TEXT NOT NULL
   );
@@ -103,6 +106,9 @@ function ensureColumn(table: string, column: string, ddl: string) {
 ensureColumn('deliverables', 'approval_status', "approval_status TEXT NOT NULL DEFAULT 'draft'");
 ensureColumn('deliverables', 'reviewer', 'reviewer TEXT');
 ensureColumn('deliverables', 'approved_by', 'approved_by TEXT');
+ensureColumn('deliverables', 'screenshot_path', 'screenshot_path TEXT');
+ensureColumn('deliverables', 'source_url', 'source_url TEXT');
+ensureColumn('cron_jobs', 'next_run_at', 'next_run_at TEXT');
 
 function seedTable<T extends object>(table: string, rows: T[]) {
   const keys = Object.keys(rows[0]);

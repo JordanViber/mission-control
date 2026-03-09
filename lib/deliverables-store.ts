@@ -19,8 +19,8 @@ export function listDeliverables(): Deliverable[] {
 export function createDeliverable(input: Deliverable) {
   const db = openDb();
   try {
-    db.prepare('INSERT INTO deliverables (id, task_id, project, title, deliverable_type, approval_status, reviewer, approved_by, path, url, summary, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
-      .run(input.id, input.task_id, input.project, input.title, input.deliverable_type, input.approval_status, input.reviewer, input.approved_by, input.path, input.url, input.summary, input.created_at);
+    db.prepare('INSERT INTO deliverables (id, task_id, project, title, deliverable_type, approval_status, reviewer, approved_by, path, url, screenshot_path, source_url, summary, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+      .run(input.id, input.task_id, input.project, input.title, input.deliverable_type, input.approval_status, input.reviewer, input.approved_by, input.path, input.url, input.screenshot_path, input.source_url, input.summary, input.created_at);
     return db.prepare('SELECT * FROM deliverables WHERE id = ?').get(input.id);
   } finally {
     db.close();
@@ -35,7 +35,7 @@ export function updateDeliverable(id: string, updates: UpdateDeliverableInput) {
 
     const clauses: string[] = [];
     const values: unknown[] = [];
-    for (const field of ['task_id', 'title', 'deliverable_type', 'approval_status', 'reviewer', 'approved_by', 'path', 'url', 'summary', 'created_at'] as const) {
+    for (const field of ['task_id', 'title', 'deliverable_type', 'approval_status', 'reviewer', 'approved_by', 'path', 'url', 'screenshot_path', 'source_url', 'summary', 'created_at'] as const) {
       if (updates[field] !== undefined) {
         clauses.push(`${field} = ?`);
         values.push(updates[field]);

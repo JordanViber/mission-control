@@ -53,6 +53,9 @@ export interface CronJob {
   name: string;
   schedule: string;
   next_run: string;
+  next_run_at: string | null;
+  next_run_relative?: string;
+  next_run_exact?: string;
   owner: string;
   project: string | null;
   status: CronStatus;
@@ -79,6 +82,8 @@ export interface Deliverable {
   approved_by: string | null;
   path: string | null;
   url: string | null;
+  screenshot_path: string | null;
+  source_url: string | null;
   summary: string;
   created_at: string;
 }

@@ -28,6 +28,8 @@ export async function POST(request: NextRequest) {
     approved_by: body.approved_by ?? null,
     path: body.path ?? null,
     url: body.url ?? null,
+    screenshot_path: body.screenshot_path ?? null,
+    source_url: body.source_url ?? null,
     summary: body.summary,
     created_at: body.created_at,
   } as Deliverable);

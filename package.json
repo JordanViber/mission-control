@@ -8,6 +8,7 @@
     "start": "next start -p 4010",
     "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
     "rebuild": "npm run clean && npm run build",
+    "screenshot:deliverable": "node scripts/capture-deliverable-screenshot.mjs",
     "lint": "next lint",
     "db:seed": "tsx scripts/seed.ts",
     "db:checkpoint": "tsx scripts/checkpoint-db.ts"

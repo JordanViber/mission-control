@@ -38,9 +38,9 @@ export const memoryItems: MemoryItem[] = [
 ];
 
 export const cronJobs: CronJob[] = [
-  { id: 'cron-1', name: 'Morning Brief', schedule: '0 6 * * *', next_run: 'Tomorrow 06:00', owner: 'Operator', project: null, status: 'Healthy', notes: 'Send concise brief with weather, headlines, and top 3 priorities.' },
-  { id: 'cron-2', name: 'Memory Maintenance', schedule: '0 */12 * * *', next_run: 'Tomorrow 08:00', owner: 'Operator', project: null, status: 'Healthy', notes: 'Review recent daily notes and promote durable insights into long-term memory.' },
-  { id: 'cron-3', name: 'optionsTaxHub Revenue Check', schedule: '30 8 * * 1-5', next_run: 'Tomorrow 08:30', owner: 'Researcher', project: 'optionsTaxHub', status: 'Warning', notes: 'Needs implementation once project metrics source is defined.' },
+  { id: 'cron-1', name: 'Morning Brief', schedule: '0 6 * * *', next_run: 'Tomorrow 06:00', next_run_at: '2026-03-09T11:00:00.000Z', owner: 'Operator', project: null, status: 'Healthy', notes: 'Send concise brief with weather, headlines, and top 3 priorities.' },
+  { id: 'cron-2', name: 'Memory Maintenance', schedule: '0 */12 * * *', next_run: 'Today 12:00 PM', next_run_at: '2026-03-09T17:00:00.000Z', owner: 'Operator', project: null, status: 'Healthy', notes: 'Review recent daily notes and promote durable insights into long-term memory.' },
+  { id: 'cron-3', name: 'optionsTaxHub Revenue Check', schedule: '30 8 * * 1-5', next_run: 'Today 8:30 AM', next_run_at: '2026-03-09T13:30:00.000Z', owner: 'Researcher', project: 'optionsTaxHub', status: 'Warning', notes: 'Needs implementation once project metrics source is defined.' },
 ];
 
 export const docs: DocItem[] = [
@@ -50,7 +50,7 @@ export const docs: DocItem[] = [
 ];
 
 export const deliverables: Deliverable[] = [
-  { id: 'deliv-1', task_id: 'MC-101', project: 'optionsTaxHub', title: 'App shell implementation', deliverable_type: 'file', approval_status: 'approved', reviewer: 'Reviewer', approved_by: 'Jordan', path: 'app/page.tsx', url: null, summary: 'Initial dashboard shell and navigation implementation.', created_at: '2026-03-08' },
-  { id: 'deliv-2', task_id: 'MC-102', project: 'optionsTaxHub', title: 'Team board implementation', deliverable_type: 'file', approval_status: 'in_review', reviewer: 'Reviewer', approved_by: null, path: 'app/team/page.tsx', url: null, summary: 'Seeded org structure and editable team status surface.', created_at: '2026-03-08' },
-  { id: 'deliv-3', task_id: 'MC-105', project: 'optionsTaxHub', title: 'Project workspace', deliverable_type: 'file', approval_status: 'changes_requested', reviewer: 'Jordan', approved_by: null, path: 'app/projects/[slug]/page.tsx', url: null, summary: 'Interactive project hub for optionsTaxHub with linked docs, memory, cron, and tasks.', created_at: '2026-03-08' },
+  { id: 'deliv-1', task_id: 'MC-101', project: 'optionsTaxHub', title: 'App shell implementation', deliverable_type: 'file', approval_status: 'approved', reviewer: 'Reviewer', approved_by: 'Jordan', path: 'app/page.tsx', url: null, screenshot_path: null, source_url: null, summary: 'Initial dashboard shell and navigation implementation.', created_at: '2026-03-08' },
+  { id: 'deliv-2', task_id: 'MC-102', project: 'optionsTaxHub', title: 'Team board implementation', deliverable_type: 'file', approval_status: 'in_review', reviewer: 'Reviewer', approved_by: null, path: 'app/team/page.tsx', url: null, screenshot_path: null, source_url: null, summary: 'Seeded org structure and editable team status surface.', created_at: '2026-03-08' },
+  { id: 'deliv-3', task_id: 'MC-105', project: 'optionsTaxHub', title: 'Project workspace', deliverable_type: 'file', approval_status: 'changes_requested', reviewer: 'Jordan', approved_by: null, path: 'app/projects/[slug]/page.tsx', url: null, screenshot_path: null, source_url: null, summary: 'Interactive project hub for optionsTaxHub with linked docs, memory, cron, and tasks.', created_at: '2026-03-08' },
 ];
