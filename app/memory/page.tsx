@@ -1,20 +1,14 @@
+import { MemoryClient } from '@/components/memory-client';
 import { SectionPage } from '@/components/section-page';
-import { getMemoryItems } from '@/lib/data';
+import { getMemoryItems, getProjects } from '@/lib/data';
 
 export default function MemoryPage() {
   const memoryItems = getMemoryItems();
+  const projects = getProjects().map((project) => project.name);
 
   return (
     <SectionPage currentPath="/memory" title="Memory" subtitle="Browse long-term memory, daily logs, notable decisions, and project context.">
-      <div className="stack">
-        {memoryItems.map((item) => (
-          <div className="card" key={item.id}>
-            <div className="panelTitle"><h3>{item.title}</h3><span className="pill">{item.bucket}</span></div>
-            <div className="muted">Source: {item.source}{item.project ? ` • Project: ${item.project}` : ''}</div>
-            <p style={{ marginBottom: 0 }}>{item.summary}</p>
-          </div>
-        ))}
-      </div>
+      <MemoryClient initialItems={memoryItems} projects={projects} />
     </SectionPage>
   );
 }
