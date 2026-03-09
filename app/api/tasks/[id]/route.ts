@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 import { getDb } from '@/lib/db';
 import type { UpdateTaskInput } from '@/lib/api-types';
 
