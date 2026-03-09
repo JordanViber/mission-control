@@ -1,6 +1,7 @@
+import { DeliverablesClient } from '@/components/deliverables-client';
 import { SectionPage } from '@/components/section-page';
 import { ProjectWorkspaceClient } from '@/components/project-workspace-client';
-import { getCronJobs, getDocs, getMemoryItems, getProjects, getTasks, getWorkers } from '@/lib/data';
+import { getCronJobs, getDeliverables, getDocs, getMemoryItems, getProjects, getTasks, getWorkers } from '@/lib/data';
 
 export default function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const projects = getProjects();
@@ -18,11 +19,15 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
   const docs = getDocs().filter((doc) => doc.project === project.name || !doc.project);
   const memory = getMemoryItems().filter((item) => item.project === project.name || item.project === null);
   const cronJobs = getCronJobs().filter((job) => job.project === project.name || job.project === null);
+  const deliverables = getDeliverables().filter((item) => item.project === project.name);
   const workers = getWorkers().filter((worker) => project.defaultTeam.includes(worker.name));
 
   return (
     <SectionPage currentPath="/projects" title={project.name} subtitle={project.summary}>
       <ProjectWorkspaceClient project={project} workers={workers} tasks={tasks} docs={docs} memory={memory} cronJobs={cronJobs} />
+      <div style={{ marginTop: 20 }}>
+        <DeliverablesClient initialDeliverables={deliverables} tasks={tasks} project={project.name} />
+      </div>
     </SectionPage>
   );
 }

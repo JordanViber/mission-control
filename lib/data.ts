@@ -1,5 +1,5 @@
 import { getDb, parseJsonArray } from './db';
-import type { CronJob, DocItem, MemoryItem, Project, Task, Worker } from './types';
+import type { CronJob, Deliverable, DocItem, MemoryItem, Project, Task, Worker } from './types';
 
 export function getProjects(): Array<Project & { defaultTeam: string[]; milestonesList: string[] }> {
   const db = getDb();
@@ -29,6 +29,10 @@ export function getCronJobs(): CronJob[] {
 
 export function getDocs(): DocItem[] {
   return getDb().prepare('SELECT * FROM docs ORDER BY updated DESC, title').all() as DocItem[];
+}
+
+export function getDeliverables(): Deliverable[] {
+  return getDb().prepare('SELECT * FROM deliverables ORDER BY created_at DESC, id DESC').all() as Deliverable[];
 }
 
 export function getSessionSummary() {

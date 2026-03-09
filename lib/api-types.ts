@@ -1,4 +1,4 @@
-import type { CronJob, DocItem, MemoryItem, Project, Task, Worker } from './types';
+import type { CronJob, Deliverable, DocItem, MemoryItem, Project, Task, Worker } from './types';
 
 export interface CreateTaskInput extends Omit<Task, 'id'> {
   id?: string;
@@ -21,3 +21,7 @@ export interface CreateDocInput extends Omit<DocItem, 'id'> {
 export interface UpdateWorkerInput extends Partial<Pick<Worker, 'status' | 'focus' | 'current_project'>> {}
 
 export interface UpdateProjectInput extends Partial<Pick<Project, 'summary' | 'priority' | 'stage' | 'owner' | 'default_team' | 'milestones'>> {}
+
+export interface CreateDeliverableInput extends Omit<Deliverable, 'id'> {
+  id?: string;
+}

@@ -1,4 +1,4 @@
-import type { CronJob, DocItem, MemoryItem, Project, Task, Worker } from './types';
+import type { CronJob, Deliverable, DocItem, MemoryItem, Project, Task, Worker } from './types';
 
 export const projects: Project[] = [
   {
@@ -47,4 +47,10 @@ export const docs: DocItem[] = [
   { id: 'doc-1', title: 'Architecture', type: 'Architecture', updated: '2026-03-08', project: null, summary: 'Core architecture for custom Mission Control, persistent workers, and source-of-truth boundaries.' },
   { id: 'doc-2', title: 'Information Architecture', type: 'Spec', updated: '2026-03-08', project: null, summary: 'Defines the left-nav tool system and the major views under each tool.' },
   { id: 'doc-3', title: 'Roadmap', type: 'Project', updated: '2026-03-08', project: 'optionsTaxHub', summary: 'Phased build plan for shell, runtime, tools, and operational workflows.' },
+];
+
+export const deliverables: Deliverable[] = [
+  { id: 'deliv-1', task_id: 'MC-101', project: 'optionsTaxHub', title: 'App shell implementation', deliverable_type: 'file', path: 'app/page.tsx', url: null, summary: 'Initial dashboard shell and navigation implementation.', created_at: '2026-03-08' },
+  { id: 'deliv-2', task_id: 'MC-102', project: 'optionsTaxHub', title: 'Team board implementation', deliverable_type: 'file', path: 'app/team/page.tsx', url: null, summary: 'Seeded org structure and editable team status surface.', created_at: '2026-03-08' },
+  { id: 'deliv-3', task_id: 'MC-105', project: 'optionsTaxHub', title: 'Project workspace', deliverable_type: 'file', path: 'app/projects/[slug]/page.tsx', url: null, summary: 'Interactive project hub for optionsTaxHub with linked docs, memory, cron, and tasks.', created_at: '2026-03-08' },
 ];

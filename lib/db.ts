@@ -1,8 +1,8 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
-import { cronJobs, docs, memoryItems, projects, tasks, workers } from './seed-data';
-import type { CronJob, DocItem, MemoryItem, Project, Task, Worker } from './types';
+import { cronJobs, deliverables, docs, memoryItems, projects, tasks, workers } from './seed-data';
+import type { CronJob, Deliverable, DocItem, MemoryItem, Project, Task, Worker } from './types';
 
 const dataDir = path.join(process.cwd(), 'data');
 const dbPath = path.join(dataDir, 'mission-control.db');
@@ -76,6 +76,18 @@ db.exec(`
     project TEXT,
     summary TEXT NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS deliverables (
+    id TEXT PRIMARY KEY,
+    task_id TEXT,
+    project TEXT NOT NULL,
+    title TEXT NOT NULL,
+    deliverable_type TEXT NOT NULL,
+    path TEXT,
+    url TEXT,
+    summary TEXT NOT NULL,
+    created_at TEXT NOT NULL
+  );
 `);
 
 function seedTable<T extends object>(table: string, rows: T[]) {
@@ -95,6 +107,7 @@ export function ensureSeeded() {
   seedTable<MemoryItem>('memory_items', memoryItems);
   seedTable<CronJob>('cron_jobs', cronJobs);
   seedTable<DocItem>('docs', docs);
+  seedTable<Deliverable>('deliverables', deliverables);
 }
 
 ensureSeeded();

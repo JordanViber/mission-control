@@ -67,3 +67,15 @@ export interface DocItem {
   project: string | null;
   summary: string;
 }
+
+export interface Deliverable {
+  id: string;
+  task_id: string | null;
+  project: string;
+  title: string;
+  deliverable_type: 'file' | 'doc' | 'link' | 'note';
+  path: string | null;
+  url: string | null;
+  summary: string;
+  created_at: string;
+}
