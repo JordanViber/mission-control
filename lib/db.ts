@@ -94,6 +94,19 @@ db.exec(`
     summary TEXT NOT NULL,
     created_at TEXT NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS usage_snapshots (
+    id TEXT PRIMARY KEY,
+    captured_at TEXT NOT NULL,
+    provider TEXT NOT NULL,
+    plan TEXT,
+    model TEXT,
+    short_term_status TEXT NOT NULL,
+    weekly_status TEXT NOT NULL,
+    overall_status TEXT NOT NULL,
+    recommendation TEXT NOT NULL,
+    raw_json TEXT NOT NULL
+  );
 `);
 
 function ensureColumn(table: string, column: string, ddl: string) {

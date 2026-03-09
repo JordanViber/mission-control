@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Brain, CalendarClock, FolderKanban, Home, KanbanSquare, Network, ScrollText, Settings, ActivitySquare, TimerReset, Wrench } from 'lucide-react';
+import { Brain, CalendarClock, FolderKanban, Home, KanbanSquare, Network, ScrollText, Settings, ActivitySquare, TimerReset, Wrench, Gauge } from 'lucide-react';
 import { ReactNode } from 'react';
 
 const nav = [
@@ -24,6 +24,7 @@ const nav = [
     label: 'System',
     items: [
       { href: '/sessions', label: 'Sessions', icon: TimerReset },
+      { href: '/usage', label: 'Usage', icon: Gauge },
       { href: '/events', label: 'Events', icon: ActivitySquare },
       { href: '/settings', label: 'Settings', icon: Settings },
     ],

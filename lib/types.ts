@@ -87,3 +87,24 @@ export interface Deliverable {
   summary: string;
   created_at: string;
 }
+
+export interface UsageWindow {
+  provider: string;
+  label: string;
+  used_percent: number;
+  remaining_percent: number;
+  reset_at: string | null;
+}
+
+export interface UsageSnapshot {
+  id: string;
+  captured_at: string;
+  provider: string;
+  plan: string | null;
+  model: string | null;
+  short_term_status: string;
+  weekly_status: string;
+  overall_status: string;
+  recommendation: string;
+  raw_json: string;
+}
