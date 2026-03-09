@@ -83,12 +83,26 @@ db.exec(`
     project TEXT NOT NULL,
     title TEXT NOT NULL,
     deliverable_type TEXT NOT NULL,
+    approval_status TEXT NOT NULL DEFAULT 'draft',
+    reviewer TEXT,
+    approved_by TEXT,
     path TEXT,
     url TEXT,
     summary TEXT NOT NULL,
     created_at TEXT NOT NULL
   );
 `);
+
+function ensureColumn(table: string, column: string, ddl: string) {
+  const columns = db.prepare(`PRAGMA table_info(${table})`).all() as Array<{ name: string }>;
+  if (!columns.some((entry) => entry.name === column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${ddl}`);
+  }
+}
+
+ensureColumn('deliverables', 'approval_status', "approval_status TEXT NOT NULL DEFAULT 'draft'");
+ensureColumn('deliverables', 'reviewer', 'reviewer TEXT');
+ensureColumn('deliverables', 'approved_by', 'approved_by TEXT');
 
 function seedTable<T extends object>(table: string, rows: T[]) {
   const keys = Object.keys(rows[0]);

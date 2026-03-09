@@ -25,3 +25,5 @@ export interface UpdateProjectInput extends Partial<Pick<Project, 'summary' | 'p
 export interface CreateDeliverableInput extends Omit<Deliverable, 'id'> {
   id?: string;
 }
+
+export interface UpdateDeliverableInput extends Partial<Omit<Deliverable, 'id'>> {}

@@ -74,6 +74,9 @@ export interface Deliverable {
   project: string;
   title: string;
   deliverable_type: 'file' | 'doc' | 'link' | 'note';
+  approval_status: 'draft' | 'in_review' | 'approved' | 'changes_requested';
+  reviewer: string | null;
+  approved_by: string | null;
   path: string | null;
   url: string | null;
   summary: string;

@@ -50,7 +50,7 @@ export const docs: DocItem[] = [
 ];
 
 export const deliverables: Deliverable[] = [
-  { id: 'deliv-1', task_id: 'MC-101', project: 'optionsTaxHub', title: 'App shell implementation', deliverable_type: 'file', path: 'app/page.tsx', url: null, summary: 'Initial dashboard shell and navigation implementation.', created_at: '2026-03-08' },
-  { id: 'deliv-2', task_id: 'MC-102', project: 'optionsTaxHub', title: 'Team board implementation', deliverable_type: 'file', path: 'app/team/page.tsx', url: null, summary: 'Seeded org structure and editable team status surface.', created_at: '2026-03-08' },
-  { id: 'deliv-3', task_id: 'MC-105', project: 'optionsTaxHub', title: 'Project workspace', deliverable_type: 'file', path: 'app/projects/[slug]/page.tsx', url: null, summary: 'Interactive project hub for optionsTaxHub with linked docs, memory, cron, and tasks.', created_at: '2026-03-08' },
+  { id: 'deliv-1', task_id: 'MC-101', project: 'optionsTaxHub', title: 'App shell implementation', deliverable_type: 'file', approval_status: 'approved', reviewer: 'Reviewer', approved_by: 'Jordan', path: 'app/page.tsx', url: null, summary: 'Initial dashboard shell and navigation implementation.', created_at: '2026-03-08' },
+  { id: 'deliv-2', task_id: 'MC-102', project: 'optionsTaxHub', title: 'Team board implementation', deliverable_type: 'file', approval_status: 'in_review', reviewer: 'Reviewer', approved_by: null, path: 'app/team/page.tsx', url: null, summary: 'Seeded org structure and editable team status surface.', created_at: '2026-03-08' },
+  { id: 'deliv-3', task_id: 'MC-105', project: 'optionsTaxHub', title: 'Project workspace', deliverable_type: 'file', approval_status: 'changes_requested', reviewer: 'Jordan', approved_by: null, path: 'app/projects/[slug]/page.tsx', url: null, summary: 'Interactive project hub for optionsTaxHub with linked docs, memory, cron, and tasks.', created_at: '2026-03-08' },
 ];
