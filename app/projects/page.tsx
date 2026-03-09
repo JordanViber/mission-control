@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { SectionPage } from '@/components/section-page';
 import { getProjects } from '@/lib/data';
 
@@ -17,6 +18,7 @@ export default function ProjectsPage() {
             <ul className="list">
               {project.milestonesList.map((milestone) => <li key={milestone}>{milestone}</li>)}
             </ul>
+            <div style={{ marginTop: 12 }}><Link href={`/projects/${project.slug}`} className="muted">Open project workspace →</Link></div>
           </div>
         ))}
       </div>

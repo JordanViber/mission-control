@@ -103,6 +103,14 @@ export function getDb() {
   return db;
 }
 
+export function checkpointDatabase() {
+  try {
+    db.pragma('wal_checkpoint(TRUNCATE)');
+  } catch {
+    // no-op
+  }
+}
+
 export function parseJsonArray(value: string): string[] {
   try {
     return JSON.parse(value) as string[];

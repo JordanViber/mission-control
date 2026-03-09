@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start -p 4000",
     "lint": "next lint",
-    "db:seed": "tsx scripts/seed.ts"
+    "db:seed": "tsx scripts/seed.ts",
+    "db:checkpoint": "tsx scripts/checkpoint-db.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",
