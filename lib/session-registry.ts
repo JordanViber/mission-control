@@ -12,6 +12,7 @@ export interface WorkerRegistryEntry {
   runtime_present: boolean;
   health: 'Healthy' | 'Warning' | 'Offline';
   reconciliation_status: 'matched' | 'missing_runtime' | 'untracked_runtime';
+  recommended_action: 'none' | 'inspect_runtime' | 'attach_existing' | 'spawn_persistent_worker';
   last_checked_at: string;
   notes: string | null;
 }
@@ -27,10 +28,16 @@ function ensureRegistryTable() {
       actual_session_key TEXT,
       health TEXT NOT NULL,
       reconciliation_status TEXT NOT NULL,
+      recommended_action TEXT NOT NULL DEFAULT 'none',
       last_checked_at TEXT NOT NULL,
       notes TEXT
     );
   `);
+
+  const columns = db.prepare("PRAGMA table_info(worker_session_registry)").all() as Array<{ name: string }>;
+  if (!columns.some((column) => column.name === 'recommended_action')) {
+    db.exec("ALTER TABLE worker_session_registry ADD COLUMN recommended_action TEXT NOT NULL DEFAULT 'none'");
+  }
 }
 
 export function reconcileWorkerRegistry() {
@@ -42,9 +49,9 @@ export function reconcileWorkerRegistry() {
 
   const upsert = db.prepare(`
     INSERT INTO worker_session_registry (
-      worker_id, desired_session_type, desired_model, desired_session_key, actual_session_key, health, reconciliation_status, last_checked_at, notes
+      worker_id, desired_session_type, desired_model, desired_session_key, actual_session_key, health, reconciliation_status, recommended_action, last_checked_at, notes
     ) VALUES (
-      @worker_id, @desired_session_type, @desired_model, @desired_session_key, @actual_session_key, @health, @reconciliation_status, @last_checked_at, @notes
+      @worker_id, @desired_session_type, @desired_model, @desired_session_key, @actual_session_key, @health, @reconciliation_status, @recommended_action, @last_checked_at, @notes
     )
     ON CONFLICT(worker_id) DO UPDATE SET
       desired_session_type=excluded.desired_session_type,
@@ -53,6 +60,7 @@ export function reconcileWorkerRegistry() {
       actual_session_key=excluded.actual_session_key,
       health=excluded.health,
       reconciliation_status=excluded.reconciliation_status,
+      recommended_action=excluded.recommended_action,
       last_checked_at=excluded.last_checked_at,
       notes=excluded.notes
   `);
@@ -63,6 +71,11 @@ export function reconcileWorkerRegistry() {
     const runtimePresent = Boolean(actual);
     const health = !runtime.connected ? 'Offline' : runtimePresent ? 'Healthy' : 'Warning';
     const reconciliationStatus = runtimePresent ? 'matched' : 'missing_runtime';
+    const recommendedAction = !runtime.connected
+      ? 'inspect_runtime'
+      : runtimePresent
+        ? 'none'
+        : 'spawn_persistent_worker';
     const notes = runtimePresent
       ? `Runtime session detected (${actual?.kind || 'unknown'}).`
       : runtime.error
@@ -77,6 +90,7 @@ export function reconcileWorkerRegistry() {
       actual_session_key: actual?.key ?? null,
       health,
       reconciliation_status: reconciliationStatus,
+      recommended_action: recommendedAction,
       last_checked_at: now,
       notes,
     });
