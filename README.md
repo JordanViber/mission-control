@@ -48,8 +48,21 @@ npm install
 npm run dev
 ```
 
+Mission Control now uses a dedicated local port to avoid colliding with other apps like optionsTaxHub.
+
 App runs on:
-- <http://localhost:4000>
+- <http://localhost:4010>
+
+## Stable local run mode
+
+For a long-running local service, prefer production mode instead of `next dev`:
+
+```bash
+npm run rebuild
+npm run start
+```
+
+Use `npm run dev` only while actively editing the app. This repo runs under WSL, and long-lived `next dev` sessions can occasionally end up with stale/missing chunk references that break CSS and API routes until the server is restarted cleanly.
 
 ## Next docs
 

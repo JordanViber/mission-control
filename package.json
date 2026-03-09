@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4000",
+    "dev": "WATCHPACK_POLLING=true next dev -p 4010",
     "build": "next build",
-    "start": "next start -p 4000",
+    "start": "next start -p 4010",
+    "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
+    "rebuild": "npm run clean && npm run build",
     "lint": "next lint",
     "db:seed": "tsx scripts/seed.ts",
     "db:checkpoint": "tsx scripts/checkpoint-db.ts"
