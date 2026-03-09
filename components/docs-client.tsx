@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { projectHref } from '@/lib/project-utils';
 import type { DocItem } from '@/lib/types';
 
 export function DocsClient({ initialDocs, projects }: { initialDocs: DocItem[]; projects: string[] }) {
@@ -55,7 +56,7 @@ export function DocsClient({ initialDocs, projects }: { initialDocs: DocItem[]; 
             <p>{doc.summary}</p>
           )}
           <div className="subtleRow">
-            <Link href={doc.project ? `/projects/${doc.project.toLowerCase()}` : '/projects'} className="muted">Open related project →</Link>
+            <Link href={projectHref(doc.project)} className="muted">Open related project →</Link>
             <button className="button" onClick={() => setEditingId(editingId === doc.id ? null : doc.id)}>{editingId === doc.id ? 'Done' : 'Edit'}</button>
           </div>
         </div>

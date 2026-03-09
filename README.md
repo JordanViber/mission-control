@@ -62,7 +62,9 @@ App runs on:
 
 The repo now includes:
 - a real routed app shell for Dashboard, Task Board, Team, Memory, Cron & Calendar, Docs, Projects, Sessions, Events, and Settings
-- seed data for optionsTaxHub, the four core teammates, tasks, docs, memory, and cron jobs
+- SQLite-backed seed data for optionsTaxHub, the four core teammates, tasks, docs, memory, cron jobs, and session registry state
+- read + write APIs for tasks, workers, docs, memory, cron jobs, projects, runtime status, and session reconciliation
+- interactive creation and editing flows across the main operational tools
 - a left sidebar designed to grow into the main operating surface
 
-The current UI is seeded with in-memory data so we can iterate fast before locking a database/API layer.
+The app is no longer an in-memory mock shell; it is now a local database-backed foundation with runtime-aware session scaffolding.
