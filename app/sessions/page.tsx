@@ -1,7 +1,10 @@
 import { SectionPage } from '@/components/section-page';
-import { sessionSummary, workers } from '@/lib/data';
+import { getSessionSummary, getWorkers } from '@/lib/data';
 
 export default function SessionsPage() {
+  const sessionSummary = getSessionSummary();
+  const workers = getWorkers();
+
   return (
     <SectionPage currentPath="/sessions" title="Sessions" subtitle="Runtime view for persistent workers, task workers, and future reconciliation health.">
       <div className="splitGrid">

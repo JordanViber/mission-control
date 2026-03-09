@@ -1,7 +1,9 @@
 import { SectionPage } from '@/components/section-page';
-import { memoryItems } from '@/lib/data';
+import { getMemoryItems } from '@/lib/data';
 
 export default function MemoryPage() {
+  const memoryItems = getMemoryItems();
+
   return (
     <SectionPage currentPath="/memory" title="Memory" subtitle="Browse long-term memory, daily logs, notable decisions, and project context.">
       <div className="stack">

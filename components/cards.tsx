@@ -1,9 +1,9 @@
-import { dashboardStats, tasks } from '@/lib/data';
+import { getDashboardStats, getTasks } from '@/lib/data';
 
 export function StatGrid() {
   return (
     <div className="kpiGrid">
-      {dashboardStats.map((stat) => (
+      {getDashboardStats().map((stat) => (
         <div className="card" key={stat.label}>
           <div className="muted">{stat.label}</div>
           <div className="kpiValue">{stat.value}</div>
@@ -15,6 +15,7 @@ export function StatGrid() {
 
 export function TaskColumns() {
   const columns = ['Inbox', 'Assigned', 'In Progress', 'Testing', 'Review', 'Done'] as const;
+  const tasks = getTasks();
   return (
     <div className="boardGrid">
       {columns.map((column) => {

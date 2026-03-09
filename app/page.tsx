@@ -1,7 +1,7 @@
 import { Brain, CalendarClock, FolderKanban, KanbanSquare, Network, ScrollText } from 'lucide-react';
 import { AppShell } from '@/components/app-shell';
 import { StatGrid } from '@/components/cards';
-import { cronJobs, docs, memoryItems, projects, workers } from '@/lib/data';
+import { getCronJobs, getDocs, getMemoryItems, getProjects, getWorkers } from '@/lib/data';
 
 const tools = [
   { name: 'Task Board', icon: KanbanSquare, description: 'Kanban queue for inbox, assigned, in progress, testing, review, and done.', status: 'Core v1' },
@@ -13,6 +13,12 @@ const tools = [
 ];
 
 export default function HomePage() {
+  const workers = getWorkers();
+  const projects = getProjects();
+  const memoryItems = getMemoryItems();
+  const docs = getDocs();
+  const cronJobs = getCronJobs();
+
   return (
     <AppShell currentPath="/">
       <div className="hero">
@@ -39,7 +45,7 @@ export default function HomePage() {
           </div>
           <div className="orgLine"><span>Jordan</span><span className="muted">Owner / Approver</span></div>
           {workers.map((worker) => (
-            <div className="orgLine" key={worker.id}><span>{worker.name}</span><span className="muted">Reports to {worker.reportsTo}</span></div>
+            <div className="orgLine" key={worker.id}><span>{worker.name}</span><span className="muted">Reports to {worker.reports_to}</span></div>
           ))}
         </div>
       </div>
