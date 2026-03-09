@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
-import { getDb } from '@/lib/db';
 import { makeId } from '@/lib/id';
+import { createTask, listTasks } from '@/lib/tasks-store';
 import type { CreateTaskInput } from '@/lib/api-types';
 import type { Task } from '@/lib/types';
-
-function loadTasks(): Task[] {
-  const db = getDb();
-  return db.prepare('SELECT * FROM tasks ORDER BY id').all() as Task[];
-}
 
 export function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
-    const tasks = loadTasks();
+    const tasks = listTasks();
     if (!status) return NextResponse.json(tasks);
     return NextResponse.json(tasks.filter((task) => task.status.toLowerCase().replace(/\s+/g, '_') === status.toLowerCase()));
   } catch (error) {
@@ -32,11 +27,14 @@ export async function POST(request: NextRequest) {
     }
 
     const id = body.id || makeId('MC');
-    const db = getDb();
-    db.prepare('INSERT INTO tasks (id, title, status, owner, project, priority) VALUES (?, ?, ?, ?, ?, ?)')
-      .run(id, body.title, body.status, body.owner, body.project, body.priority);
-
-    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
+    const task = createTask({
+      id,
+      title: body.title,
+      status: body.status,
+      owner: body.owner,
+      project: body.project,
+      priority: body.priority,
+    } as Task);
     return NextResponse.json(task, { status: 201 });
   } catch (error) {
     console.error('Failed to create task:', error);

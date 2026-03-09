@@ -1,34 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
-import { getDb } from '@/lib/db';
+import { updateTask } from '@/lib/tasks-store';
 import type { UpdateTaskInput } from '@/lib/api-types';
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const body = (await request.json()) as UpdateTaskInput;
-  const db = getDb();
-  const existing = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
+  const task = updateTask(id, body);
 
-  if (!existing) {
+  if (!task) {
     return NextResponse.json({ error: 'Task not found' }, { status: 404 });
   }
 
-  const updates: string[] = [];
-  const values: unknown[] = [];
-  for (const field of ['title', 'status', 'owner', 'project', 'priority'] as const) {
-    if (body[field] !== undefined) {
-      updates.push(`${field} = ?`);
-      values.push(body[field]);
-    }
-  }
-
-  if (!updates.length) {
-    return NextResponse.json(existing);
-  }
-
-  values.push(id);
-  db.prepare(`UPDATE tasks SET ${updates.join(', ')} WHERE id = ?`).run(...values);
-  const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(id);
   return NextResponse.json(task);
 }
