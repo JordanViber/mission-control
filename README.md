@@ -56,3 +56,13 @@ App runs on:
 - `docs/ARCHITECTURE.md`
 - `docs/ROADMAP.md`
 - `docs/INFORMATION_ARCHITECTURE.md`
+- `docs/V1_DATA_MODEL.md`
+
+## Current implementation status
+
+The repo now includes:
+- a real routed app shell for Dashboard, Task Board, Team, Memory, Cron & Calendar, Docs, Projects, Sessions, Events, and Settings
+- seed data for optionsTaxHub, the four core teammates, tasks, docs, memory, and cron jobs
+- a left sidebar designed to grow into the main operating surface
+
+The current UI is seeded with in-memory data so we can iterate fast before locking a database/API layer.
