@@ -5,6 +5,7 @@ import type { MemoryItem } from '@/lib/types';
 
 export function MemoryClient({ initialItems, projects }: { initialItems: MemoryItem[]; projects: string[] }) {
   const [items, setItems] = useState(initialItems);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [form, setForm] = useState({ title: '', bucket: 'Project' as MemoryItem['bucket'], project: projects[0] ?? '', source: 'Mission Control UI', summary: '' });
 
@@ -17,6 +18,15 @@ export function MemoryClient({ initialItems, projects }: { initialItems: MemoryI
       const created = await res.json() as MemoryItem;
       setItems((current) => [created, ...current]);
       setForm({ ...form, title: '', summary: '' });
+    }
+  }
+
+  async function updateItem(id: string, updates: Partial<MemoryItem>) {
+    const res = await fetch(`/api/memory/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
+    if (res.ok) {
+      const updated = await res.json() as MemoryItem;
+      setItems((current) => current.map((item) => item.id === id ? updated : item));
+      setEditingId(null);
     }
   }
 
@@ -42,7 +52,18 @@ export function MemoryClient({ initialItems, projects }: { initialItems: MemoryI
         <div className="card" key={item.id}>
           <div className="panelTitle"><h3>{item.title}</h3><span className="pill">{item.bucket}</span></div>
           <div className="muted">Source: {item.source}{item.project ? ` • Project: ${item.project}` : ''}</div>
-          <p style={{ marginBottom: 0 }}>{item.summary}</p>
+          {editingId === item.id ? (
+            <div className="stack">
+              <input className="input" defaultValue={item.title} onBlur={(e) => updateItem(item.id, { title: e.target.value })} />
+              <textarea className="input" defaultValue={item.summary} rows={4} onBlur={(e) => updateItem(item.id, { summary: e.target.value })} />
+            </div>
+          ) : (
+            <p style={{ marginBottom: 0 }}>{item.summary}</p>
+          )}
+          <div className="subtleRow" style={{ marginTop: 12 }}>
+            <span className="muted">{item.project ?? 'No project'}</span>
+            <button className="button" onClick={() => setEditingId(editingId === item.id ? null : item.id)}>{editingId === item.id ? 'Done' : 'Edit'}</button>
+          </div>
         </div>
       ))}
     </div>

@@ -6,6 +6,7 @@ import type { DocItem } from '@/lib/types';
 
 export function DocsClient({ initialDocs, projects }: { initialDocs: DocItem[]; projects: string[] }) {
   const [docs, setDocs] = useState(initialDocs);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ title: '', type: 'Project' as DocItem['type'], updated: new Date().toISOString().slice(0, 10), project: projects[0] ?? '', summary: '' });
 
   async function createDoc(e: React.FormEvent) {
@@ -15,6 +16,15 @@ export function DocsClient({ initialDocs, projects }: { initialDocs: DocItem[]; 
       const created = await res.json() as DocItem;
       setDocs((current) => [created, ...current]);
       setForm({ ...form, title: '', summary: '' });
+    }
+  }
+
+  async function updateDoc(id: string, updates: Partial<DocItem>) {
+    const res = await fetch(`/api/docs/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
+    if (res.ok) {
+      const updated = await res.json() as DocItem;
+      setDocs((current) => current.map((doc) => doc.id === id ? updated : doc));
+      setEditingId(null);
     }
   }
 
@@ -36,8 +46,18 @@ export function DocsClient({ initialDocs, projects }: { initialDocs: DocItem[]; 
         <div className="card" key={doc.id}>
           <div className="panelTitle"><h3>{doc.title}</h3><span className="pill">{doc.type}</span></div>
           <div className="muted">Updated {doc.updated}{doc.project ? ` • Project: ${doc.project}` : ''}</div>
-          <p>{doc.summary}</p>
-          <Link href={doc.project ? `/projects/${doc.project.toLowerCase()}` : '/projects'} className="muted">Open related project →</Link>
+          {editingId === doc.id ? (
+            <div className="stack">
+              <input className="input" defaultValue={doc.title} onBlur={(e) => updateDoc(doc.id, { title: e.target.value })} />
+              <textarea className="input" defaultValue={doc.summary} rows={4} onBlur={(e) => updateDoc(doc.id, { summary: e.target.value })} />
+            </div>
+          ) : (
+            <p>{doc.summary}</p>
+          )}
+          <div className="subtleRow">
+            <Link href={doc.project ? `/projects/${doc.project.toLowerCase()}` : '/projects'} className="muted">Open related project →</Link>
+            <button className="button" onClick={() => setEditingId(editingId === doc.id ? null : doc.id)}>{editingId === doc.id ? 'Done' : 'Edit'}</button>
+          </div>
         </div>
       ))}
     </div>

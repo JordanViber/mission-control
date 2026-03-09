@@ -5,6 +5,7 @@ import type { CronJob, Worker } from '@/lib/types';
 
 export function CronClient({ initialJobs, workers, projects }: { initialJobs: CronJob[]; workers: Worker[]; projects: string[] }) {
   const [jobs, setJobs] = useState(initialJobs);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: '', schedule: '0 9 * * 1-5', next_run: 'Tomorrow 09:00', owner: workers[0]?.name ?? 'Operator', project: projects[0] ?? '', status: 'Healthy' as CronJob['status'], notes: '' });
 
   async function createJob(e: React.FormEvent) {
@@ -14,6 +15,15 @@ export function CronClient({ initialJobs, workers, projects }: { initialJobs: Cr
       const created = await res.json() as CronJob;
       setJobs((current) => [created, ...current]);
       setForm({ ...form, name: '', notes: '' });
+    }
+  }
+
+  async function updateJob(id: string, updates: Partial<CronJob>) {
+    const res = await fetch(`/api/cron-jobs/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
+    if (res.ok) {
+      const updated = await res.json() as CronJob;
+      setJobs((current) => current.map((job) => job.id === id ? updated : job));
+      setEditingId(null);
     }
   }
 
@@ -39,7 +49,18 @@ export function CronClient({ initialJobs, workers, projects }: { initialJobs: Cr
         <div className="card" key={job.id}>
           <div className="panelTitle"><h3>{job.name}</h3><span className="pill">{job.status}</span></div>
           <div className="muted">{job.schedule} • Next run: {job.next_run} • Owner: {job.owner}{job.project ? ` • Project: ${job.project}` : ''}</div>
-          <p style={{ marginBottom: 0 }}>{job.notes}</p>
+          {editingId === job.id ? (
+            <div className="stack">
+              <input className="input" defaultValue={job.name} onBlur={(e) => updateJob(job.id, { name: e.target.value })} />
+              <textarea className="input" defaultValue={job.notes} rows={4} onBlur={(e) => updateJob(job.id, { notes: e.target.value })} />
+            </div>
+          ) : (
+            <p style={{ marginBottom: 0 }}>{job.notes}</p>
+          )}
+          <div className="subtleRow" style={{ marginTop: 12 }}>
+            <span className="muted">{job.project ?? 'No project'}</span>
+            <button className="button" onClick={() => setEditingId(editingId === job.id ? null : job.id)}>{editingId === job.id ? 'Done' : 'Edit'}</button>
+          </div>
         </div>
       ))}
     </div>
