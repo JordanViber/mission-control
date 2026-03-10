@@ -4,6 +4,7 @@ WORKDIR=/home/jordan/.openclaw/workspace
 LOG=/home/jordan/.openclaw/workspace/.automation/health-check.log
 STATUS_JSON=/tmp/openclaw_status.json
 FAIL_COUNT_FILE=/home/jordan/.openclaw/workspace/.automation/health-fail-count
+NOTIFY_SH=/home/jordan/.openclaw/workspace/Repositories/mission-control/scripts/notify.sh
 
 openclaw status --json > "$STATUS_JSON" || true
 jq '.' "$STATUS_JSON" > /dev/null 2>&1 || true
@@ -35,10 +36,23 @@ if [ "$GATEWAY_REACHABLE" != "true" ] || [ "$MC_OK" -ne 1 ]; then
     # restart mission control server
     pkill -f 'Repositories/mission-control/node_modules/.bin/next' || true
     (cd /home/jordan/.openclaw/workspace/Repositories/mission-control && nohup npm run start > .automation/prod-server.log 2>&1 &) || true
+    # notify if notification configured
+    if [ -x "$NOTIFY_SH" ]; then
+      "$NOTIFY_SH" --title "Mission Control auto-restart" --body "Gateway restart attempted due to health check (fails=$FAILS)." || true
+    fi
   fi
 else
   echo "[$(date -u +'%Y-%m-%d:%TZ')] healthy" >> "$LOG"
   rm -f "$FAIL_COUNT_FILE" || true
+fi
+
+# send healthy notification once when recovered
+if [ "$GATEWAY_REACHABLE" = "true" ] && [ "$MC_OK" -eq 1 ]; then
+  if [ -f "/home/jordan/.openclaw/workspace/.automation/health-notified" ]; then
+    rm -f "/home/jordan/.openclaw/workspace/.automation/health-notified" || true
+  fi
+else
+  touch "/home/jordan/.openclaw/workspace/.automation/health-notified"
 fi
 
 # Keep recent logs trimmed
